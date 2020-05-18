@@ -9,6 +9,16 @@ function exitWithUsage(code = 0): never {
   Deno.exit(code)
 }
 
+function getResultText(index: number, name: string, entry: DatabaseEntry) {
+  const githubUrl = `https://github.com/${entry.owner}/${entry.repo}`
+  return [
+    `${green(String(index + 1))} ${bold(name)} - ${entry.desc}`,
+    `  ${gray("by")} ${entry.owner}`,
+    `  ${gray("github:")} ${githubUrl}`,
+    `  ${gray("deno:")} ${`https://deno.land/x/${name}`}`,
+  ].join("\n")
+}
+
 async function main() {
   const database = await getDatabase()
 
@@ -40,13 +50,3 @@ async function main() {
 main().catch((error) => {
   console.error(error)
 })
-
-function getResultText(index: number, name: string, entry: DatabaseEntry) {
-  const githubUrl = `https://github.com/${entry.owner}/${entry.repo}`
-  return [
-    `${green(String(index + 1))} ${bold(name)} - ${entry.desc}`,
-    `  ${gray("by")} ${entry.owner}`,
-    `  ${gray("github:")} ${githubUrl}`,
-    `  ${gray("deno:")} ${`https://deno.land/x/${name}`}`,
-  ].join("\n")
-}
