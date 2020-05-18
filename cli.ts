@@ -35,8 +35,12 @@ async function main() {
     exitWithUsage()
   }
 
-  const matchingEntries = [...database.entries()].filter(([key]) =>
-    key.includes(query),
+  const matchingEntries = [...database.entries()].filter(
+    ([name, entry]) =>
+      name.includes(query) ||
+      entry.desc.includes(query) ||
+      entry.owner.includes(query) ||
+      entry.repo.includes(query),
   )
 
   if (matchingEntries.length === 0) {
