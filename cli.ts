@@ -1,4 +1,3 @@
-import Spinner from "https://deno.land/x/cli_spinners/mod.ts"
 import { clipboard } from "./src/clipboard.ts"
 import { bold, gray, green } from "./src/colors.ts"
 import { DatabaseEntry, getDatabase } from "./src/database.ts"
@@ -6,8 +5,6 @@ import { promptValidated } from "./src/prompt.ts"
 import { validateNumber, validateRange } from "./src/validate.ts"
 
 const usageString = `Usage: dms <query>`
-
-const spinner = Spinner.getInstance()
 
 function exitWithUsage(code = 0): never {
   console.log(usageString)
@@ -25,9 +22,8 @@ function getResultText(index: number, name: string, entry: DatabaseEntry) {
 }
 
 async function main() {
-  await spinner.start("Fetching module database...")
+  console.log("Fetching module database...")
   const database = await getDatabase()
-  await spinner.stop()
 
   const [query] = Deno.args
   if (!query) {
