@@ -42,8 +42,10 @@ async function main() {
     console.log(resultText, "\n")
   }
 
-  const selection = await promptValidated("Module number:", (answer) =>
-    validateRange(1, matchingEntries.length, validateNumber(answer)),
+  const selection = await promptValidated(
+    "Module to use (enter number from list):",
+    (answer) =>
+      validateRange(1, matchingEntries.length, validateNumber(answer)),
   )
 }
 
