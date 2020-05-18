@@ -1,4 +1,5 @@
 import { bold, gray, green } from "https://deno.land/std/fmt/colors.ts"
+import { clipboard } from "./clipboard.ts"
 import { DatabaseEntry, getDatabase } from "./database.ts"
 import { promptValidated, validateNumber, validateRange } from "./helpers.ts"
 
@@ -42,11 +43,26 @@ async function main() {
     console.log(resultText, "\n")
   }
 
-  const selection = await promptValidated(
+  const selectionNumber = await promptValidated(
     "Module to use (enter number from list):",
     (answer) =>
       validateRange(1, matchingEntries.length, validateNumber(answer)),
   )
+  const [name, selection] = matchingEntries[selectionNumber - 1]
+
+  // TODO: not all modules have a mod.ts,
+  // so we want to have a more advanced UI here
+  // what we'll want to do is basically show a little file tree explorer in the console
+  // that lets the user travel through the repo's files
+  // to get the module they want to import
+  // but for now, since a _vast_ majority of them use mod.ts,
+  // it'll work to just copy mod.ts
+  // and of course, in that file explorer, mod.ts should be selected by default
+  // we'll also want to list versions and let the user key through them
+
+  const moduleUrl = `https://deno.land/x/${name}/mod.ts`
+  await clipboard.writeText(moduleUrl)
+  console.log(`${green("√")} Copied to clipboard: ${moduleUrl}`)
 }
 
 main().catch((error) => {
