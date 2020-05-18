@@ -25,9 +25,9 @@ function getResultText(index: number, name: string, entry: DatabaseEntry) {
 }
 
 async function main() {
-  spinner.start("Fetching module database...")
+  await spinner.start("Fetching module database...")
   const database = await getDatabase()
-  spinner.stop()
+  await spinner.stop()
 
   const [query] = Deno.args
   if (!query) {
