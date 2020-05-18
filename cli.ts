@@ -1,7 +1,8 @@
-import { bold, gray, green } from "https://deno.land/std/fmt/colors.ts"
-import { clipboard } from "./clipboard.ts"
-import { DatabaseEntry, getDatabase } from "./database.ts"
-import { promptValidated, validateNumber, validateRange } from "./helpers.ts"
+import { clipboard } from "./src/clipboard.ts"
+import { bold, gray, green } from "./src/colors.ts"
+import { DatabaseEntry, getDatabase } from "./src/database.ts"
+import { promptValidated } from "./src/prompt.ts"
+import { validateNumber, validateRange } from "./src/validate.ts"
 
 const usageString = `Usage: dms <query>`
 

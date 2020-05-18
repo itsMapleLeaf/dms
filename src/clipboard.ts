@@ -1,6 +1,6 @@
 // Copyright (c) 2019 Rafał Pocztarski. All rights reserved.
 // MIT License (Expat). See: https://github.com/rsp/deno-clipboard
-// Fixed by kingdaro
+// Fixed locally for Deno 1.0
 
 type OperatingSystem = typeof Deno.build.os
 
