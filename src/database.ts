@@ -1,26 +1,14 @@
-import { fetchJson } from "./helpers.ts"
-
-export type DatabaseEntry = {
+export type DatabaseJsonEntry = {
   desc: string
   owner: string
   type: string
   repo: string
 }
 
-const databaseUrl =
+export const databaseJsonUrl =
   "https://raw.githubusercontent.com/denoland/deno_website2/master/database.json"
 
-export async function getDatabase() {
-  const database = new Map<string, DatabaseEntry>()
-  for (const [key, entry] of Object.entries(await fetchJson(databaseUrl))) {
-    if (isValidDatabaseEntry(entry)) {
-      database.set(key, entry)
-    }
-  }
-  return database
-}
-
-function isValidDatabaseEntry(data: any): data is DatabaseEntry {
+export function isValidDatabaseEntry(data: any): data is DatabaseJsonEntry {
   return (
     data != null &&
     typeof data.desc === "string" &&
