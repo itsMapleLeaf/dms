@@ -6,5 +6,5 @@ export function write(text: string) {
 
 export async function readLine() {
   const line = await new BufReader(Deno.stdin).readLine()
-  return line?.line ? new TextDecoder().decode(line?.line) : ""
+  return line?.line ? new TextDecoder().decode(line.line) : ""
 }
