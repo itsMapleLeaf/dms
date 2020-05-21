@@ -60,7 +60,9 @@ export class ModuleSearchEntry {
   }
 
   matches(query: string) {
-    return Object.values(this.data).some((value) => value.includes(query))
+    return Object.values(this.data).some((value) =>
+      value.toLowerCase().includes(query.toLowerCase()),
+    )
   }
 }
 
