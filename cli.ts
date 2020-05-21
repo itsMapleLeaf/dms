@@ -65,6 +65,4 @@ async function main() {
   console.log(`${green("√")} Copied to clipboard: ${entry.moduleImportUrl}`)
 }
 
-main().catch((error) => {
-  console.error(error)
-})
+await main()
