@@ -1,6 +1,6 @@
 # **d**eno **m**odule **s**earch
 
-## Install
+## Install / Update
 
 ```
 deno install --allow-net --allow-run -n dms -f https://raw.githubusercontent.com/kingdaro/dms/master/cli.ts
