@@ -1,8 +1,8 @@
 import { clipboard } from "./src/clipboard.ts"
 import { bold, gray, green } from "./src/colors.ts"
+import { raise } from "./src/helpers.ts"
 import { ModuleSearch, ModuleSearchEntry } from "./src/module-search.ts"
 import { promptValidated } from "./src/prompt.ts"
-import { validateNumber, validateRange } from "./src/validate.ts"
 
 const usageString = `Usage: dms <query>`
 
@@ -43,13 +43,30 @@ async function main() {
     console.log(resultText, "\n")
   }
 
-  const selectionNumber = await promptValidated(
-    "Module to use (enter number from list):",
-    (answer) =>
-      validateRange(1, matchingEntries.length, validateNumber(answer)),
-  )
+  const [minNumber, maxNumber] = [1, matchingEntries.length]
 
-  const entry = matchingEntries[selectionNumber - 1]
+  const selectedEntry = await promptValidated(
+    "Module to use (name or number):",
+    (answer) => {
+      const numberAnswer = Number(answer)
+
+      if (!Number.isNaN(numberAnswer)) {
+        if (numberAnswer < minNumber || numberAnswer > maxNumber) {
+          raise(`Invalid number, must be ${minNumber}-${maxNumber}`)
+        }
+        return matchingEntries[numberAnswer - 1]
+      }
+
+      const entryByName = matchingEntries.find(
+        (entry) => entry.data.name === answer,
+      )
+      if (!entryByName) {
+        raise(`Could not find result by name "${answer}"`)
+      }
+
+      return entryByName
+    },
+  )
 
   // TODO: not all modules have a mod.ts,
   // so we want to have a more advanced UI here
@@ -61,8 +78,10 @@ async function main() {
   // and of course, in that file explorer, mod.ts should be selected by default
   // we'll also want to list versions and let the user key through them
 
-  await clipboard.writeText(entry.moduleImportUrl)
-  console.log(`${green("√")} Copied to clipboard: ${entry.moduleImportUrl}`)
+  await clipboard.writeText(selectedEntry.moduleImportUrl)
+  console.log(
+    `${green("√")} Copied to clipboard: ${selectedEntry.moduleImportUrl}`,
+  )
 }
 
 await main()
