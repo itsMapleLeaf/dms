@@ -28,9 +28,11 @@ export async function runCli({
   }
   process.stdin?.close()
 
-  const status = await process.status()
-  const output = await process.output()
-  const stderrOutput = await process.stderrOutput()
+  const [status, output, stderrOutput] = await Promise.all([
+    process.status(),
+    process.output(),
+    process.stderrOutput(),
+  ])
 
   process.close()
 
