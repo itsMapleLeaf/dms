@@ -9,5 +9,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: denolib/deno-action@0.19.0
-      - run: deno test --allow-run
+
+      - name: "Install deno"
+        run: |
+          curl -fsSL https://deno.land/x/install/install.sh | sh
+          export DENO_INSTALL="/home/runner/.deno"
+          export PATH="$DENO_INSTALL/bin:$PATH"
+
+      - name: "Run tests"
+        run: deno test --allow-run
