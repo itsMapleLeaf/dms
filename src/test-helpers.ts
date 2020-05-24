@@ -50,7 +50,6 @@ export async function runCli({
 
     // it could hang forever if it needs stdin but we never give it,
     // so we'll terminate it after a delay
-    // the delay can be pretty small since it usually runs instantly
-    delay(300).then(() => raise("Test timed out")),
+    delay(2000).then(() => raise("Test timed out")),
   ])
 }

@@ -4,9 +4,13 @@ import {
 } from "https://deno.land/std@9752b85/testing/asserts.ts"
 import { runCli } from "./src/test-helpers.ts"
 
-Deno.test("exiting if no query given", async () => {
-  const { status } = await runCli()
-  assertEquals(status.code, 1)
+Deno.test({
+  name: "exiting if no query given",
+  fn: async () => {
+    const { status } = await runCli()
+    assertEquals(status.code, 1)
+  },
+  sanitizeOps: false,
 })
 
 Deno.test("copying first result to clipboard", async () => {
