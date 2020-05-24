@@ -21,20 +21,18 @@ function getResultText(index: number, entry: ModuleSearchEntry) {
   ].join("\n")
 }
 
-async function main() {
+function getQueryArg() {
   const [query] = Deno.args
   if (!query) {
     console.log("Error: query required")
     exitWithUsage()
   }
+  return query
+}
 
-  console.log("Fetching module database...")
-
-  const search = await ModuleSearch.fromDatabaseJson()
-
-  const matchingEntries = search.filter(query)
-  if (matchingEntries.length === 0) {
-    return console.log(gray("No matching entries found :("))
+async function getEntrySelection(matchingEntries: ModuleSearchEntry[]) {
+  if (matchingEntries.length === 1) {
+    return matchingEntries[0]
   }
 
   console.log()
@@ -45,28 +43,40 @@ async function main() {
 
   const [minNumber, maxNumber] = [1, matchingEntries.length]
 
-  const selectedEntry = await promptValidated(
-    "Module to use (name or number):",
-    (answer) => {
-      const numberAnswer = Number(answer)
+  return promptValidated("Module to use (name or number):", (answer) => {
+    const numberAnswer = Number(answer)
 
-      if (!Number.isNaN(numberAnswer)) {
-        if (numberAnswer < minNumber || numberAnswer > maxNumber) {
-          raise(`Invalid number, must be ${minNumber}-${maxNumber}`)
-        }
-        return matchingEntries[numberAnswer - 1]
+    if (!Number.isNaN(numberAnswer)) {
+      if (numberAnswer < minNumber || numberAnswer > maxNumber) {
+        raise(`Invalid number, must be ${minNumber}-${maxNumber}`)
       }
+      return matchingEntries[numberAnswer - 1]
+    }
 
-      const entryByName = matchingEntries.find(
-        (entry) => entry.data.name === answer,
-      )
-      if (!entryByName) {
-        raise(`Could not find result by name "${answer}"`)
-      }
+    const entryByName = matchingEntries.find(
+      (entry) => entry.data.name === answer,
+    )
+    if (!entryByName) {
+      raise(`Could not find result by name "${answer}"`)
+    }
 
-      return entryByName
-    },
-  )
+    return entryByName
+  })
+}
+
+async function main() {
+  const query = getQueryArg()
+
+  console.log("Fetching module database...")
+
+  const search = await ModuleSearch.fromDatabaseJson()
+
+  const matchingEntries = search.filter(query)
+  if (matchingEntries.length === 0) {
+    return console.log(gray("No matching entries found :("))
+  }
+
+  const selectedEntry = await getEntrySelection(matchingEntries)
 
   // TODO: not all modules have a mod.ts,
   // so we want to have a more advanced UI here
