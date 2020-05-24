@@ -1,6 +1,3 @@
-import { delay } from "https://deno.land/std@9752b85/async/delay.ts"
-import { raise } from "./helpers.ts"
-
 const encoder = new TextEncoder()
 const decoder = new TextDecoder()
 
@@ -8,48 +5,38 @@ export async function runCli({
   args = [],
   stdin,
 }: { args?: string[]; stdin?: string } = {}) {
-  async function runProcess() {
-    const process = Deno.run({
-      cmd: [
-        "deno",
-        "run",
-        "--allow-run",
-        "--allow-net",
-        "--allow-env",
-        "./cli.ts",
-        ...args,
-      ],
-      env: {
-        TEST: "true",
-      },
-      stdout: "piped",
-      stderr: "piped",
-      stdin: stdin ? "piped" : "null",
-    })
+  const process = Deno.run({
+    cmd: [
+      "deno",
+      "run",
+      "--allow-run",
+      "--allow-net",
+      "--allow-env",
+      "./cli.ts",
+      ...args,
+    ],
+    env: {
+      TEST: "true",
+    },
+    stdout: "piped",
+    stderr: "piped",
+    stdin: "piped",
+  })
 
-    if (stdin) {
-      await process.stdin?.write(encoder.encode(stdin))
-      process.stdin?.close()
-    }
-
-    const status = await process.status()
-    const output = await process.output()
-    const stderrOutput = await process.stderrOutput()
-
-    process.close()
-
-    return {
-      status,
-      output: decoder.decode(output),
-      stderrOutput: decoder.decode(stderrOutput),
-    }
+  if (stdin) {
+    await process.stdin?.write(encoder.encode(stdin))
   }
+  process.stdin?.close()
 
-  return Promise.race([
-    runProcess(),
+  const status = await process.status()
+  const output = await process.output()
+  const stderrOutput = await process.stderrOutput()
 
-    // it could hang forever if it needs stdin but we never give it,
-    // so we'll terminate it after a delay
-    delay(2000).then(() => raise("Test timed out")),
-  ])
+  process.close()
+
+  return {
+    status,
+    output: decoder.decode(output),
+    stderrOutput: decoder.decode(stderrOutput),
+  }
 }
