@@ -8,6 +8,8 @@ TODO:
 
 - [x] If only one result was found, use that result
 
+- [x] Tests
+
 - [ ] Branch/hash selection:
 
   - Fetch all branches
