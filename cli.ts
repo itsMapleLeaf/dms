@@ -25,7 +25,7 @@ function getQueryArg() {
   const [query] = Deno.args
   if (!query) {
     console.log("Error: query required")
-    exitWithUsage()
+    exitWithUsage(1)
   }
   return query
 }
@@ -69,7 +69,10 @@ async function main() {
 
   console.log("Fetching module database...")
 
-  const search = await ModuleSearch.fromDatabaseJson()
+  const search =
+    Deno.env.get("TEST") === "true"
+      ? ModuleSearch.fromMock()
+      : await ModuleSearch.fromDatabaseJson()
 
   const matchingEntries = search.filter(query)
   if (matchingEntries.length === 0) {

@@ -26,6 +26,29 @@ export class ModuleSearch {
     return new ModuleSearch(entries)
   }
 
+  static fromMock() {
+    return new ModuleSearch([
+      ModuleSearchEntry.withData({
+        name: "a",
+        description: "",
+        githubRepoName: "arepo",
+        githubUsername: "auser",
+      }),
+      ModuleSearchEntry.withData({
+        name: "b",
+        description: "",
+        githubRepoName: "brepo",
+        githubUsername: "buser",
+      }),
+      ModuleSearchEntry.withData({
+        name: "ab",
+        description: "description ab",
+        githubRepoName: "ab repo",
+        githubUsername: "ab user",
+      }),
+    ])
+  }
+
   filter(query: string) {
     return this.entries.filter((entry) => entry.matches(query))
   }
@@ -36,6 +59,10 @@ export class ModuleSearchEntry {
 
   private constructor(data: ModuleSearchEntryData) {
     this.data = data
+  }
+
+  static withData(data: ModuleSearchEntryData) {
+    return new ModuleSearchEntry(data)
   }
 
   static fromDatabaseJsonEntry(name: string, entry: DatabaseJsonEntry) {
