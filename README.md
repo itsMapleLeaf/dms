@@ -4,11 +4,11 @@ Allows searching for deno modules from CLI, and copies the module import URL to 
 
 TODO:
 
-- ~~Allow entering number _or_ module name~~
+- [x] Allow entering number _or_ module name
 
-- If only one result was found, use that result
+- [x] If only one result was found, use that result
 
-- Branch/hash selection:
+- [ ] Branch/hash selection:
 
   - Fetch all branches
   - Filter branches by those which are valid version numbers
@@ -22,8 +22,8 @@ TODO:
       - This will show a prompt which lets the user enter a branch name or version
       - Maaaaybe list the available branches
 
-- Show selection dialogue to import files other than `mod.ts`
-- Also search and show results for std modules
+- [ ] Also search and show results for std modules
+- [ ] Fetch files from git and show selection dialogue to import files other than `mod.ts`
 
 ## Install / Update
 
